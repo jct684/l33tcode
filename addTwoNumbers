@@ -1,0 +1,67 @@
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = self.head
+        
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        res = LinkedList()
+        carry = 0
+        while l1 and l2:
+            new_node = ListNode()
+            new_node.val =(l1.val + l2.val + carry) % 10
+            if (l1.val + l2.val + carry) >= 10:
+                carry = int((l1.val + l2.val + carry)/10)
+            else:
+                carry = 0
+            if res.head is None:
+                res.head = new_node
+                res.tail = res.head
+            else:
+                res.tail.next = new_node
+                res.tail = res.tail.next
+            l1 = l1.next
+            l2 = l2.next
+        while l2:
+            new_node = ListNode()
+            new_node.val =(l2.val + carry) % 10
+            if (l2.val + carry) >= 10:
+                carry = int((l2.val + carry)/10)
+            else:
+                carry = 0
+            if res.head is None:
+                res.head = new_node
+                res.tail = res.head
+            else:
+                res.tail.next = new_node
+                res.tail = res.tail.next
+            l2 = l2.next
+        while l1:
+            new_node = ListNode()
+            new_node.val =(l1.val + carry) % 10
+            if (l1.val + carry) >= 10:
+                carry = int((l1.val + carry)/10)
+            else:
+                carry = 0
+            if res.head is None:
+                res.head = new_node
+                res.tail = res.head
+            else:
+                res.tail.next = new_node
+                res.tail = res.tail.next
+            l1 = l1.next
+        if carry > 0:
+            new_node = ListNode(carry)
+            if res.head is None:
+                res.head = new_node
+                res.tail = res.head
+            else:
+                res.tail.next = new_node
+                res.tail = res.tail.next
+        return res.head
