@@ -1,10 +1,3 @@
-# Definition for a binary tree node.
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
 class Solution:
     def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
         #inorder search to find the start value and the destination value
@@ -14,37 +7,32 @@ class Solution:
         #compare root --> start and root --> destination and remove repeated values from root --> destination
         #append the remaining values to start --> X to create start --> destination
         #return the result as a string by using join function
-        startValue_path = []
-        destValue_path = []
-        found_target = False
-        startValue_path = self.root_to_target(root, startValue, startValue_path, found_target)[0]
-        startValue_path.reverse()
-        destValue_path = self.root_to_target(root, destValue, destValue_path, found_target)[0]
-        destValue_path.reverse()
-        i = 0
-        while i < min(len(startValue_path), len(destValue_path)) and startValue_path[i] == destValue_path[i]:
-            startValue_path.remove(startValue_path[i])
-            destValue_path.remove(destValue_path[i])
-        reversed_startValue_path = ["U" for item in startValue_path]
-        reversed_startValue_path.extend(destValue_path)
-        return "".join(reversed_startValue_path)
+        #bool of "" and None is false while bool of characters and objects is True, can use this to improve recursive function by avoiding flag in previous version
+        ancestor = self.lowest_common_ancestor(root, startValue, destValue)
+        start_path = self.find_path(ancestor, startValue)
+        end_path = self.find_path(ancestor, destValue)
+        start_path_up = "U" * len(start_path)
+        return "".join([start_path_up,end_path])
     
-    def root_to_target(self, root, target, path, found_target):
-        if root.val == target:
-            found_target = True
-            return [path, found_target]
-        if root.left:
-            res = self.root_to_target(root.left, target, path, found_target)
-            path = res[0]
-            found_target = res[1]
-            if found_target:
-                path.append("L")
-                return [path, found_target]
-        if root.right:
-            res = self.root_to_target(root.right, target, path, found_target)
-            path = res[0]
-            found_target = res[1]
-            if found_target:
-                path.append("R")
-                return [path, found_target]
-        return [path, found_target]
+    def find_path(self, ancestor, target, path=[], direction=""):
+        if ancestor is None:
+            return ""
+        if ancestor.val == target:
+            path.append(direction)
+            return "".join(path)
+        path.append(direction)
+        left = self.find_path(ancestor.left, target, path, "L")
+        right = self.find_path(ancestor.right, target, path, "R")
+        path.pop()
+        return left or right
+    
+    def lowest_common_ancestor(self, root, first, second):
+        if root is None:
+            return ""
+        if root.val == first or root.val == second:
+            return root
+        left = self.lowest_common_ancestor(root.left, first, second)
+        right = self.lowest_common_ancestor(root.right, first, second)
+        if left and right:
+            return root
+        return left or right
