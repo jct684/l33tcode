@@ -1,37 +1,29 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        #start a pointer at one end and use a second pointer at same letter on opposite end
-        #determine if the substring is a palindrome and save length if it is
-        #if not substring, bring the pointer in until there are no more duplicate letters
-        #repeat across the length of the string
-        #if the length of the longest palindrome is greater than the length of the substring then skip
-        #time complexity is O(n^2*k) where O(n) is length of string, O(n) is verification, O(k) are duplicates
-        #space complexity O(1)
-        highest_len = 1
-        saved_start = 0
-        saved_end = 0
-        for i in range(len(s)):
-            start = i
-            letter = s[i]
-            end = s.rfind(letter)
-            while start < end:
-                if highest_len >= end - start + 1:
-                    break
-                else:
-                    if self.check_palindrome(s[start:end+1]):
-                        if end - start + 1 > highest_len:
-                            highest_len = end - start + 1
-                            saved_start = start
-                            saved_end = end
-                    end = s.rfind(letter, start, end)
-        return s[saved_start:saved_end+1]
-    
-    def check_palindrome(self, substring):
-        start = 0
-        end = len(substring)-1
-        while start < end:
-            if substring[start] != substring[end]:
-                return False
-            start += 1
-            end -= 1
-        return True
+        #inside out approach for determining palindrome
+        #time complexity O(n^2), O(n) to iterate through list, O(n) to determine outward expansion
+        #space complexity O(k) where k is length of substring
+        #to improve space complexity, we could probably just return the left and right ends and then return the sliced string s
+        highest_len = 0
+        substring_saved = s[0]
+        for i in range(len(s)-1):
+            substring_1 = self.expand_outward(s, i, i)
+            substring_2 = self.expand_outward(s, i, i+1)
+            if len(substring_1) > highest_len:
+                highest_len = len(substring_1)
+                substring_saved = substring_1
+            if len(substring_2) > highest_len:
+                highest_len = len(substring_2)
+                substring_saved = substring_2
+        return substring_saved
+            
+    def expand_outward(self, s, left, right):
+        substring = s[left]
+        expand = False
+        while left >= 0 and right < len(s) and s[left] == s[right]:
+            left -= 1
+            right += 1
+            expand = True
+        if expand:
+            substring = s[left+1:right]
+        return substring
