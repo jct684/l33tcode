@@ -6,39 +6,21 @@
 #         self.right = right
 class Solution:
     def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
-        #DFS where you store the leaf nodes as found
-        #a leaf node does not have children
-        #time complexity O(n^2) I think because I have to delete leaves and search for new leaves repeatedly but somehow this is faster than 98% leetcode solutions so I'm not sure
-        #space complexity O(n) spaced used by solution array
-        DFS_saved = []
-        self.parent_set = set()
-        while root:
-            DFS_leaf = []
-            DFS_saved.append(self.DFS(root, DFS_leaf))
-            for v in self.parent_set:
-                if v[1] == "L":
-                    v[0].left = None
-                if v[1] == "R":
-                    v[0].right = None
-                if v[1] == "":
-                    root = None
-            self.parent_set.clear()
-        return DFS_saved
-            
+        #track what level you are on to determine position in resulting array
+        #time complexity O(n), check every node once and store in array based on level
+        #space complexity O(n) where n is
+        self.res = []
+        self.DFS(root)
+        return self.res
     
-    def DFS(self, root, DFS_leaf, direction= "", parent=""):
-        if root.left:
-            parent = root
-            direction = "L"
-            self.DFS(root.left, DFS_leaf, direction, parent)
-        if root.right:
-            parent = root
-            direction = "R"
-            self.DFS(root.right, DFS_leaf, direction, parent)
-        if root.left == None and root.right == None:
-            DFS_leaf.append(root.val)
-            self.parent_set.add((parent, direction))
-        return DFS_leaf
-            
-        
-        
+    def DFS(self, root, level=0):
+        if not root:
+            return level
+        left = self.DFS(root.left, level)
+        right = self.DFS(root.right, level)
+        level = max(left, right)
+        if level < len(self.res):
+            self.res[level].append(root.val)
+        else:
+            self.res.append([root.val])
+        return level + 1
