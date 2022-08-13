@@ -12,9 +12,7 @@ class Solution:
         return num_islands
 
     def DFS(self, grid, row, col):
-        if row > len(grid)-1 or row < 0 or col > len(grid[row])-1 or col < 0 or grid[row][col] == "0":
-            pass
-        else:
+        if not(row > len(grid)-1 or row < 0 or col > len(grid[row])-1 or col < 0 or grid[row][col] == "0"):
             grid[row][col] = "0"
             self.DFS(grid, row, col+1)
             self.DFS(grid, row+1, col)
