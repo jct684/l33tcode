@@ -12,7 +12,6 @@ class Solution:
             if intervals[i][0] <= ans[j][1]:
                 ans[j][1] = max(ans[j][1], intervals[i][1])
             else:
-                print(intervals[i][0], intervals[i-1][1])
                 ans.append([intervals[i][0], intervals[i][1]])
                 j += 1
         return ans
