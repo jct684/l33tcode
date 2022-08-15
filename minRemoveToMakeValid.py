@@ -13,7 +13,7 @@ def min_remove_to_make_valid(s):
     s = list(s)
     for index in range(len(s)):
         if s[index] == "(":
-            stack.append([s[index], index])
+            stack.append(index)
         if s[index] == ")":
             if len(stack) == 0:
                 s[index] = ""
@@ -21,5 +21,5 @@ def min_remove_to_make_valid(s):
                 stack.pop()
     while stack:
         index = stack.pop()
-        s[index[1]] = ""
+        s[index] = ""
     return "".join(s)
