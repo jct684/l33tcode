@@ -10,36 +10,27 @@ class Node:
 
 class Solution:
     def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
-        root = p
-        while root.parent:
-            root = root.parent
-            if root.val == q.val:
-                return root
-        return lowest_common_ancestor(root, p, q)
+        ancestors = {}
+        ancestors[q] = True
+        ancestors[p] = True
+        return lowest_common_ancestor(p, q, ancestors)
 
-def lowest_common_ancestor(root, p, q):
-    #DFS to find the targets p and q
-    #return nothing or return the node if it the target
-    #when a node receives a node from both left and right children then it is the lowest common ancestor
-    #when a node receives a node from one side, it needs to pass up that node
-    #time complexity O(n)
-    #space complexity O(n)
-    #there is probably a faster way with O(height of tree) time complexity where we only go up instead of going back down the tree 
-    if root is None:
-        return ""
-    left = lowest_common_ancestor(root.left, p, q)
-    right = lowest_common_ancestor(root.right, p, q)
-    if left and right:
-        return root
-    if left or right:
-        if root.val == p.val:
-            return root
-        return left or right
-    if root.val == p.val or root.val == q.val:
-        return root
-    return ""
-    
-    
-    
-    
-        
+def lowest_common_ancestor(p, q, ancestors):
+    #traverse up one target until reaching root
+    #if the other target is found then ancestor is the other target
+    #use a dictionary to store all the objects up to root as found
+    #if the other target is not found, then start from other target and traverse up until finding a corresponding key in the dictionary
+    #time complexity O(height of tree)
+    #space complexity O(height of tree)
+    current_node = p
+    while current_node.parent:
+        current_node = current_node.parent
+        if ancestors.get(current_node, False):
+            return current_node
+        else:
+            ancestors[current_node] = True
+    current_node = q
+    while current_node.parent:
+        current_node = current_node.parent
+        if ancestors.get(current_node, False):
+            return current_node
