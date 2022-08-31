@@ -5,9 +5,8 @@ class Solution:
     #create a list with local sums at each step of w
     #generate a random number from 1 to the sum(w)
     #if the random number is less than the local sum then return the index which should correspond to the picked index
-    #time complexity O(n)
+    #time complexity O(n) for creating the local sums, O(log n) for searching it
     #space complexity O(n)
-    #this can be improved with binary search which I'll probably do next
     def __init__(self, w: List[int]):
         current_total = 0
         self.w_totals = []
@@ -17,12 +16,25 @@ class Solution:
         self.total = current_total
     
     def pickIndex(self) -> int:
-        random_num = randint(1, self.total)
-        for index in range(0, len(self.w_totals)):
-            if self.w_totals[index] >= random_num:
-                return index
+        if len(self.w_totals) == 0:
+            return 0
+        else:
+            random_num = randint(1, self.total)
+            return modified_binary_search(self.w_totals, random_num)
 
-
+def modified_binary_search(array, target):
+    right = len(array) - 1
+    left = 0
+    while left < right:
+        mid = left + (right - left) // 2
+        if target == array[mid]:
+            return mid
+        elif target > array[mid]:
+            left = mid + 1
+        else:
+            right = mid
+    return left
+    
 # Your Solution object will be instantiated and called as such:
 # obj = Solution(w)
 # param_1 = obj.pickIndex()
