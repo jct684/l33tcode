@@ -1,3 +1,5 @@
+from collections import deque
+
 # """
 # This is the interface that allows for creating nested lists.
 # You should not implement it, or speculate about its implementation
@@ -22,26 +24,21 @@
 
 class NestedIterator:
     def __init__(self, nestedList: [NestedInteger]):
-        self.p = 0
-        self.flat = []
-        self.recursive_flatten(nestedList)
+        self.deque = deque([item for item in nestedList])
     
     def next(self) -> int:
-        self.p += 1 
-        return self.flat[self.p-1]
-        
-    def recursive_flatten(self, nested_list):
-        for index in range(len(nested_list)):
-            if nested_list[index].isInteger():
-                self.flat.append(nested_list[index].getInteger())
-            else:
-                self.recursive_flatten(nested_list[index].getList())
-    
+        while self.deque and self.deque[0].isInteger() is False:
+            self.deque.extendleft(reversed(self.deque.popleft().getList()))
+        if self.deque and self.deque[0].isInteger():
+            return self.deque.popleft()
+
     def hasNext(self) -> bool:
-        if self.p < len(self.flat):
+        while self.deque and self.deque[0].isInteger() is False:
+            self.deque.extendleft(reversed(self.deque.popleft().getList()))
+        if len(self.deque) > 0:
             return True
         return False
-        
+
 # Your NestedIterator object will be instantiated and called as such:
 # i, v = NestedIterator(nestedList), []
 # while i.hasNext(): v.append(i.next())
