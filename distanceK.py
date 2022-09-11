@@ -34,7 +34,7 @@ def DFS(root, target, ancestor_dict, left, right):
         ancestor_dict[root.right] = root
         right = DFS(root.right, target, ancestor_dict, left, right)
     if root.left is False and root.right is False:
-        return ""
+        return []
     return left or right
     
     
