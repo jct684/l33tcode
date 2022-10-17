@@ -1,28 +1,16 @@
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        #start at the first positive number as largest sum
-        #find sum of subsequent number and store higher value
-        #if the sum is zero or lower then reset at next number
-        #if number is above zero, then continue to store max of next sum
-        #continue until end of array
-        #check again at end of array for max
-        i = 0
-        large_sum = nums[i]
-        larger = 0
-        positive_number = False
-        while i < len(nums) and nums[i]<=0:
-            large_sum = max(nums[i], large_sum)
-            i += 1
-        while i < len(nums):
-            if larger <= 0:
-                larger = 0
-            if nums[i] >= 0:
-                larger += nums[i]
-                i += 1
-            else:
-                large_sum = max(large_sum, larger)
-                larger += nums[i]
-                i += 1
-        if nums[i-1] >= 0:
-            large_sum = max(large_sum, larger)
-        return large_sum
+        #I did this problem a long time ago before I knew about dynamic programming
+        #I think I should redo this problem in a cleaner way now that I learned it in class
+        #OPT(i) = local maximum sum of contiguous subarray
+        #OPT(i) = max(nums[i], OPT(i-1) + nums[i])
+        #use a tracker to track the global maximum
+        #time complexity O(n)
+        #space complexity O(n)
+        memo = [0 for _ in range(len(nums))]
+        global_max = float('-inf')
+        for i in range(len(nums)):
+            memo[i] = max(nums[i], memo[i-1] + nums[i])
+            if (memo[i] > global_max):
+                global_max = memo[i]
+        return global_max
