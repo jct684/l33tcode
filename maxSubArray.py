@@ -7,6 +7,7 @@ class Solution:
         #use a tracker to track the global maximum
         #time complexity O(n)
         #space complexity O(n)
+        #because we only need OPT(i-1) it may be possible to improve space complexity by only tracking OPT(i-1)
         memo = [0 for _ in range(len(nums))]
         global_max = float('-inf')
         for i in range(len(nums)):

@@ -8,6 +8,7 @@ class Solution:
         #otherwise, OPT(i, j) = OPT(i+1, j+1) + 1
         #time complexity O(n*m) check n numbers against size m array
         #space complexity O(n*m) n calls with size m arrays
+        memo_arr = []
         memo_dict = defaultdict(lambda :0)
         for i in range (len(nums1) - 1, -1, -1):
             for j in range (len(nums2) - 1, -1, -1):
