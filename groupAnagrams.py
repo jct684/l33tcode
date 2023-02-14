@@ -6,7 +6,7 @@ class Solution:
         for word in strs:
             curr_word = sorted(word)
             curr_word = str(curr_word)
-            if (ana_dict.get(curr_word, 0) == 0):
+            if curr_word not in ana_dict:
                 ana_dict[curr_word] = [word]
             else:
                 ana_dict[curr_word].append(word)
