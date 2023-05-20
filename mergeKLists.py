@@ -5,7 +5,7 @@
 #         self.next = next
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
-        #time complexity O(n log k) where n is number of nodes and k is number of levels to be merged
+        #time complexity O(n log k) where n is number of nodes and k is the number of lists
         #space complexity O(1)
         if lists == []:
             return None
