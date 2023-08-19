@@ -1,17 +1,20 @@
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        #I did this problem a long time ago before I knew about dynamic programming
-        #I think I should redo this problem in a cleaner way now that I learned it in class
-        #OPT(i) = local maximum sum of contiguous subarray
-        #OPT(i) = max(nums[i], OPT(i-1) + nums[i])
-        #use a tracker to track the global maximum
-        #time complexity O(n)
-        #space complexity O(n)
-        #because we only need OPT(i-1) it may be possible to improve space complexity by only tracking OPT(i-1)
-        memo = [0 for _ in range(len(nums))]
-        global_max = float('-inf')
-        for i in range(len(nums)):
-            memo[i] = max(nums[i], memo[i-1] + nums[i])
-            if (memo[i] > global_max):
-                global_max = memo[i]
-        return global_max
+        #input: array of nums
+        #output: largest sum
+        #time complexity O(n) track largest sum, current total if above 0, and new starting total when iterating across
+        #space complexity O(1)
+        max_sum = nums[0]
+        curr_sum = 0
+        for num in nums:
+            reset = False
+            if num >= curr_sum + num:
+                curr_sum = num
+            else:
+                curr_sum += num
+                if curr_sum < 0:
+                    curr_sum = 0
+                    reset = True
+            if not reset:
+                max_sum = max(max_sum, curr_sum)
+        return max_sum

@@ -1,21 +1,25 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        #inside out approach for determining palindrome
-        #time complexity O(n^2), O(n) to iterate through list, O(n) to determine outward expansion
-        #space complexity O(1)
-        self.highest_len = 0
-        self.start = 0
-        self.end = 1
-        for i in range(len(s)-1):
-            self.expand_outward(s, i, i)
-            self.expand_outward(s, i, i+1)
-        return s[self.start:self.end]
-            
-    def expand_outward(self, s, left, right):
-        while left >= 0 and right < len(s) and s[left] == s[right]:
-            left -= 1
-            right += 1
-        if self.highest_len < right - left + 1:
-            self.highest_len = right - left + 1
-            self.start = left+1
-            self.end = right
+        #time complexity O(n^2)
+        #space complexity O(n)
+        longest_substr = ''
+        def insideOut(first_p, second_p):
+            nonlocal longest_substr
+            if(s[first_p] != s[second_p]):
+                return
+            while 1:
+                if first_p == 0 or second_p == len(s)-1:
+                    break
+                if s[first_p-1]==s[second_p+1]:
+                    first_p -= 1
+                    second_p += 1
+                else:
+                    break
+            if second_p+1-first_p > len(longest_substr):
+                longest_substr = s[first_p:second_p+1]
+            return
+        for s_index in range (len(s)):
+            insideOut(s_index, s_index)
+            if s_index+1 != len(s):
+                insideOut(s_index, s_index+1)
+        return longest_substr

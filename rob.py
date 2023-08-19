@@ -1,18 +1,22 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        #dynamic programming
-        #OPT(i) = maximum money robbed
-        #OPT(i) = maximum(OPT(i-2) + nums[i]), OPT(i-1)) where i = index of house robbed
         #time complexity O(n)
         #space complexity O(n)
-        if len(nums) == 1:
-            return nums[0]
-        elif len(nums) == 2:
-            return max(nums[0], nums[1])
-        else:
-            memo = [float('-inf') for _ in range (len(nums))]
-            memo[0] = nums[0]
-            memo[1] = max(nums[0], nums[1])
-            for i in range (2, len(memo)):
-                memo[i] = max(memo[i-2] + nums[i], memo[i-1])
-            return memo[len(nums)-1]
+        #OPT(i) = max(OPT(i-1), OPT(i-2) + nums)
+        memo = {}
+        return robbedMoney(len(nums)-1, nums, memo)
+
+def memoi(f):
+    def inner(n, nums, memo):
+        if n not in memo:
+            memo[n] = f(n, nums, memo)
+        return memo[n]
+    return inner
+
+@memoi
+def robbedMoney(n, nums, memo):
+    if n==0:
+        return nums[0]
+    if n==1:
+        return max(nums[0], nums[1])
+    return max(robbedMoney(n-1, nums, memo), robbedMoney(n-2, nums, memo)+nums[n])
