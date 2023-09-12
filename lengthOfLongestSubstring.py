@@ -1,20 +1,20 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
+        #input: string
+        #output: length of longest substring without repeating characters
         #time complexity O(n)
         #space complexity O(n)
-        str_set = set()
-        first_p = 0
-        second_p = 0
-        longest_sub = 0
-        for letter in s:
-            if letter not in str_set:
-                str_set.add(s[second_p])
-                second_p += 1
-                longest_sub = max(longest_sub, second_p - first_p)
-            else:
-                while(s[first_p] != s[second_p]):
-                    str_set.remove(s[first_p])
-                    first_p += 1
-                first_p += 1
-                second_p += 1
-        return longest_sub
+        #test 1: "abcdde", 4
+        #test 2: "abddcba", 4
+        left = 0
+        right = 0
+        max_length = 0
+        members = set()
+        while right < len(s):
+            while s[right] in members:
+                members.remove(s[left])
+                left += 1
+            members.add(s[right])
+            max_length = max(max_length, len(members))
+            right += 1
+        return max_length
