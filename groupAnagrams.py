@@ -1,13 +1,10 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        #O(m*n log n) time complexity
-        #O(m*n) space complexity
+        #input: array of strings
+        #return: array of arrays including grouped anagrams
         ana_dict = {}
-        for index in range (len(strs)):
-            word_sort = str(sorted(strs[index]))
-            if word_sort in ana_dict:
-                ana_dict[word_sort].append(strs[index])
-            else:
-                ana_dict[word_sort] = [strs[index]]
-        ans = [val for val in ana_dict.values()]
-        return ans
+        for word in strs:
+            word_list = ana_dict.get(str(sorted(word)), [])
+            word_list.append(word)
+            ana_dict[str(sorted(word))] = word_list
+        return ana_dict.values()

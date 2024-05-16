@@ -1,14 +1,18 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        #create left/right array O(n) time complexity, O(n) space complexity
-        left_array = [1]
-        for i in range (1, len(nums)):
-            left_array.append(left_array[i-1] * nums[i-1])
-        right_array = [1]
-        for i in range (1, len(nums)):
-            right_array.append(right_array[i-1] * nums[len(nums)-i])
-        right_array.reverse()
-        ans = []
-        for i in range (len(nums)):
-            ans.append(left_array[i] * right_array[i])
+        #input: array
+        #output: array
+        left_arr = [0] * len(nums)
+        for index, num in enumerate(nums):
+            prev = left_arr[index-1] if index > 0 else 1
+            left_arr[index] = num * prev
+        right_arr = [0] * len(nums)
+        for index, num in reversed(list(enumerate(nums))):
+            prev = right_arr[index+1] if index < len(nums)-1 else 1
+            right_arr[index] = num * prev
+        ans = [0] * len(nums)
+        for i in range(len(ans)):
+            left = left_arr[i-1] if i > 0 else 1
+            right = right_arr[i+1] if i < len(nums)-1 else 1
+            ans[i] = left * right
         return ans

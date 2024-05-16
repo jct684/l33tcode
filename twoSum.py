@@ -1,16 +1,16 @@
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:
-        #input: array of sorted integers
-        #output: index + 1
-        #test case: [-5, 0, 1, 4, 10], target = 4, answer = [2, 5]
-        #two pointers on opposite ends, either increase low or decrease high based on target
-        #O(n) time complexity
-        #O(1) space complexity
-        low = 0
-        high = len(numbers)-1
-        while(numbers[low] + numbers[high] != target):
-            if target - numbers[low] < numbers[high]:
-                high -= 1
+        #input: indexed array sorted in non-decreasing order
+        #output: two indicies +1 in an array
+        #constant extra space
+        #TEST: [-4, -2, 0, 0, 3, 4] target: 1, ANS: [2, 6]
+        left_ind = 0
+        right_ind = len(numbers)-1
+        total = numbers[0] + numbers[-1]
+        while total != target:
+            if total < target:
+                left_ind += 1
             else:
-                low += 1
-        return [low+1, high+1]
+                right_ind -= 1
+            total = numbers[left_ind] + numbers[right_ind]
+        return [left_ind+1, right_ind+1]
