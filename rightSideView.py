@@ -4,31 +4,32 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+from collections import deque
 class Solution:
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
-        #preorder search along right side instead of typical left side
-        #track the level and if the level does not exist then add root.val
-        #if the level does exist, continue traversal
-        #time complexity O(n)
         #space complexity O(n)
-        #this one seems like an easy problem
-        return rightSideView(root)
-
-def rightSideView(root):
-    if root:
-        ans = []
-        dict_level = {}
+        #time complexity O(n)
+        if not root:
+            return []
         level = 0
-        return DFS(root, ans, dict_level, level)
-    return []
-
-def DFS(root, ans, dict_level, level):
-    if dict_level.get(level, False) is False:
-        ans.append(root.val)
-        dict_level[level] = True
-    level += 1
-    if root.right:
-        DFS(root.right, ans, dict_level, level)
-    if root.left:
-        DFS(root.left, ans, dict_level, level)
-    return ans
+        dq = deque([(root, level)])
+        tree_info = []
+        max_level = 0
+        while dq:
+            node_info = dq.popleft()
+            node = node_info[0]
+            level = node_info[1]
+            max_level = max(max_level, level)
+            tree_info.append((node.val, level))
+            if node.right:
+                dq.append((node.right, level+1))
+            if node.left:
+                dq.append((node.left, level+1))
+        res = []
+        level_num = 0
+        while level_num <= max_level:
+            for val, level in tree_info:
+                if level == level_num:
+                    level_num += 1
+                    res.append(val)
+        return res
